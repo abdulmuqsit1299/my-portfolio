@@ -4,7 +4,8 @@
 
 Hello, welcome. This is a bpersonal portfolio and technical blog of **Abdul Muqsit** (Enterprise AI Engineer), It's built with [Astro](https://astro.build), and uses [TinaCMS](https://tina.io) to edit the content!
 
-![cover](https://github.com/abdulmuqsit1299/my-portfolio/assets/1454517/b56ff04f-9499-48e7-be62-d9b422c4287d)
+<img width="891" height="902" alt="image" src="https://github.com/user-attachments/assets/08d1393d-d26e-451b-a459-c0cade73a227" />
+
 
 ## See the blahg
 
