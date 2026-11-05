@@ -10,49 +10,61 @@ import getTags from "../scripts/getTags";
 const posts = await getCollection("posts");
 const allTags = getTags(posts);
 
-let {
-	content: { title, description, added, updated, tags, heroImage },
-} = Astro.props;
+// Extract props safely from frontmatter, content, or root props
+const { frontmatter, content } = Astro.props;
+const data = frontmatter || content || Astro.props;
 
-added = new Date(added).toLocaleDateString(
-	"en-us",
-	{
-		year: "numeric",
-		month: "short",
-		day: "numeric",
-	}
-);
+const title = data.title || Astro.props.title;
+const description = data.description || Astro.props.description;
+const headerTitle = data.headerTitle;
+const headerSubtitle = data.headerSubtitle;
+const heroImage = data.heroImage;
+const tags = data.tags;
 
-if (updated) {
-	updated = new Date(updated).toLocaleDateString(
-		"en-us",
-		{
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-		}
-	);
-}
+// Safely format dates if available
+let added = data.added ? new Date(data.added).toLocaleDateString("en-us", {
+	year: "numeric",
+	month: "short",
+	day: "numeric",
+}) : null;
+
+let updated = data.updated ? new Date(data.updated).toLocaleDateString("en-us", {
+	year: "numeric",
+	month: "short",
+	day: "numeric",
+}) : null;
 ---
 
 <html lang="en-us">
-	<BaseHead title={title} description={description} />
-
+	<head>
+		<BaseHead title={title} description={description} />
+	</head>
 	<body>
-		<Header />
+		<Header title={headerTitle} subtitle={headerSubtitle} />
 		<main>
 			<article>
 				{heroImage && <img width={720} height={360} src={heroImage} alt="" />}
-				<h1 class="article-title">{title}</h1>
-				{updated ?
+				{title && <h1 class="article-title">{title}</h1>}
+				{updated ? (
 					<span><time>{added}</time>, last updated on <time>{updated}</time></span>
-					:
+				) : (
 					<span>{added && <time>{added}</time>}</span>
-				}
-				<Tags tags={tags} />
+				)}
+				{tags && <Tags tags={tags} />}
 				<hr />
 				<div class="blog-post">
 					<slot />
+				</div>
+				<!-- Share on LinkedIn Button -->
+				<div class="share-container" style="margin-top: 2em; padding-top: 1em; border-top: 1px dashed #ccc;">
+					<a 
+						href={`https://www.linkedin.com/sharing/share-offsite/?url=https://abdulmuqsit.dev/post/${Astro.params.slug}`} 
+						target="_blank" 
+						rel="noopener noreferrer" 
+						style="font-weight: bold; color: #16a34a; text-decoration: underline;"
+					>
+						Share this post on LinkedIn ↗
+					</a>
 				</div>
 			</article>
 		</main>

@@ -1,0 +1,180 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ColorScript from "../components/ColorScript.astro";
+
+// Fetch all posts dynamically using Vite import.meta.glob
+const postsRaw = import.meta.glob('./post/*.md', { eager: true });
+const allPosts = Object.values(postsRaw) as any[];
+
+// Sort posts by date descending
+const posts = allPosts.sort(
+	(a, b) => new Date(b.frontmatter.added || b.frontmatter.date).getTime() - new Date(a.frontmatter.added || a.frontmatter.date).getTime()
+);
+
+// Extract unique tags
+const allTags = [...new Set(posts.flatMap((post) => post.frontmatter.tags || []))];
+
+// Group posts by Year
+const postsByYear = posts.reduce((acc, post) => {
+	const postDate = post.frontmatter.added || post.frontmatter.date;
+	const year = new Date(postDate).getFullYear();
+	if (!acc[year]) acc[year] = [];
+	acc[year].push(post);
+	return acc;
+}, {} as Record<number, typeof posts>);
+
+const years = Object.keys(postsByYear).map(Number).sort((a, b) => b - a);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title="Blog | Abdul Muqsit" description="Writing and Musings on AI & Software Engineering" />
+	</head>
+	<body>
+		<Header title="Abdul's Blog" subtitle="Writing, musings, and technical architecture" />
+		<main>
+			<!-- Cassidy Exact Filter Block -->
+			<div class="filter-navigation">
+				<hr class="cassidy-hr" />
+				
+				{years.length > 0 && (
+					<div class="years-nav">
+						{years.map((year) => (
+							<a href={`#year-${year}`} class="year-link">{year}</a>
+						))}
+					</div>
+				)}
+
+				<hr class="cassidy-hr" />
+
+				{allTags.length > 0 && (
+					<div class="tags-container">
+						{allTags.map((tag) => (
+							<a href={`/tag/${tag}`} class="tag-link">#{tag}</a>
+						))}
+					</div>
+				)}
+
+				<hr class="cassidy-hr" />
+			</div>
+
+			<!-- Posts Grouped By Year -->
+			{years.map((year) => (
+				<section class="posts-list" id={`year-${year}`}>
+					<h2 class="year-heading">{year}</h2>
+					<ul>
+						{postsByYear[year].map((post) => (
+							<li class="post-item">
+								<a href={post.url} class="post-title">
+									{post.frontmatter.title}
+								</a>
+								<span class="post-date">
+									{new Date(post.frontmatter.added || post.frontmatter.date).toLocaleDateString("en-us", { month: "short", day: "numeric", year: "numeric" })}
+								</span>
+								<p class="post-desc">{post.frontmatter.description}</p>
+								{post.frontmatter.tags && (
+									<div class="post-tags">
+										{post.frontmatter.tags.map((t: string) => (
+											<a href={`/tag/${t}`} class="tag-link">#{t}</a>
+										))}
+									</div>
+								)}
+							</li>
+						))}
+					</ul>
+				</section>
+			))}
+		</main>
+		<Footer />
+		<ColorScript />
+	</body>
+</html>
+
+<style>
+	main {
+		width: 960px;
+		max-width: calc(100% - 2em);
+		margin: auto;
+		padding: 2em 1em;
+	}
+	.filter-navigation {
+		margin-bottom: 3em;
+		text-align: center;
+	}
+	.cassidy-hr {
+		border: none;
+		border-top: 1px solid #777;
+		margin: 1.2em 0;
+	}
+	.years-nav {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 1.2em 1.8em;
+		max-width: 650px;
+		margin: 0 auto;
+		padding: 0.2em 0;
+	}
+	.year-link {
+		font-size: 1.05rem;
+		font-weight: bold;
+		text-decoration: underline;
+		color: inherit;
+	}
+	.tags-container {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 0.8em 1.4em;
+		max-width: 650px;
+		margin: 0 auto;
+		padding: 0.2em 0;
+	}
+	.tag-link {
+		font-size: 0.95rem;
+		text-decoration: underline;
+		color: inherit;
+		font-weight: normal;
+	}
+	.post-tags {
+		display: flex;
+		gap: 0.8em;
+		margin-top: 0.4em;
+	}
+	.posts-list {
+		margin-bottom: 3em;
+	}
+	.year-heading {
+		font-size: 2.2rem;
+		font-weight: normal;
+		margin-bottom: 1em;
+		color: #222;
+	}
+	.posts-list ul {
+		list-style: none;
+		padding: 0;
+	}
+	.post-item {
+		margin-bottom: 2em;
+	}
+	.post-title {
+		font-size: 1.3rem;
+		font-weight: bold;
+		text-decoration: underline;
+		color: inherit;
+	}
+	.post-date {
+		margin-left: 0.8em;
+		font-size: 0.9rem;
+		color: #777;
+		font-style: italic;
+	}
+	.post-desc {
+		margin: 0.4em 0 0.4em;
+		color: #444;
+		line-height: 1.5;
+	}
+</style>

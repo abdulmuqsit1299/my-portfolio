@@ -55,9 +55,9 @@ This current version is maintained by aboutfeeds.com:
 
 	 https://github.com/genmon/aboutfeeds
 
-The styles in this template come from Cassidy Williams (aka cassidoo):
+The styles in this template come from Abdulmuqsit Williams (aka abdulmuqsit):
 
-	 https://cassidoo.co/
+	 https://abdulmuqsit.co/
 
 
 ## Feedback

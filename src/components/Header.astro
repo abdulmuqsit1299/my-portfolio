@@ -1,7 +1,13 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
-import { title, subtitle } from "../settings/settings.json"
+import defaultSettings from "../settings/settings.json";
 
+interface Props {
+	title?: string;
+	subtitle?: string;
+}
+
+const { title = defaultSettings.title, subtitle = defaultSettings.subtitle } = Astro.props;
 ---
 
 <header>
@@ -10,15 +16,56 @@ import { title, subtitle } from "../settings/settings.json"
 			<h1>{title}</h1>
 			<h2>{subtitle}</h2>
 		</div>
+		<img src="/avatar.jpg" alt="Abdul Muqsit" class="circle-avatar" />
 	</div>
 </header>
 <nav>
 	<HeaderLink href="/">home</HeaderLink>
-	<HeaderLink href="/posts">posts</HeaderLink>
-	<HeaderLink href="https://cassidoo.co/newsletter">etc</HeaderLink>
+	<HeaderLink href="/experience">experience</HeaderLink>
+	<HeaderLink href="/projects">projects</HeaderLink>
+	<HeaderLink href="/newsletter">newsletter</HeaderLink>
+	<HeaderLink href="/blog">blog</HeaderLink>
+	<HeaderLink href="/socials">socials</HeaderLink>
 </nav>
+
 <style>
-	h2 {
-		margin: 0.5em 0;
+	header {
+		margin: 0 0 2em;
+	}
+	.header-section {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 2em;
+		margin-bottom: 1.5em;
+	}
+	.header-frame h1 {
+		margin: 0;
+		font-size: 2.2rem;
+	}
+	.header-frame h2 {
+		margin: 0.2em 0 0;
+		font-size: 1.1rem;
+		color: #666;
+		font-weight: normal;
+	}
+	.circle-avatar {
+		width: 170px;
+		height: 170px;
+		border-radius: 50%;
+		object-fit: cover;
+		box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+		flex-shrink: 0;
+	}
+
+	@media (max-width: 600px) {
+		.header-section {
+			flex-direction: column-reverse;
+			text-align: center;
+		}
+		.circle-avatar {
+			width: 130px;
+			height: 130px;
+		}
 	}
 </style>
