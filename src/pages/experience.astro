@@ -1,0 +1,115 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { title } from '../settings/settings.json';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Experience | ${title}`} description="Abdul Muqsit Work Experience" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1 class="page-title">Work Experience</h1>
+			
+			<div class="experience-list">
+				<div class="job-card">
+					<div class="job-header">
+						<h3>Software & Systems Developer</h3>
+						<span class="company">Pixelab Solutions</span>
+					</div>
+					<span class="duration">Mar 2026 – Sep 2026</span>
+					<ul>
+						<li>Managed backend application updates, database maintenance, and server performance tuning, maintaining 99.9% system uptime.</li>
+						<li>Refactored legacy SQL queries and server scripts, achieving a 25% improvement in page load speeds and API performance.</li>
+					</ul>
+				</div>
+
+				<div class="job-card">
+					<div class="job-header">
+						<h3>Full Stack Developer Intern</h3>
+						<span class="company">App in Snap (Gulberg, Islamabad)</span>
+					</div>
+					<span class="duration">Aug 2025 – Mar 2026</span>
+					<ul>
+						<li>Engineered secure RESTful Web APIs and microservices using .NET Core and Azure-backed cloud architectures, serving 10,000+ daily request payloads.</li>
+						<li>Integrated enterprise data systems, REST APIs, and third-party AI endpoints to ensure high availability and seamless data flow.</li>
+						<li>Applied Spec-Driven Development (SDD) and automated workflows to accelerate feature delivery while maintaining enterprise security standards.</li>
+						<li>Managed version control, sprint tracking, and CI/CD pipelines inside Azure DevOps using structured Git branch models.</li>
+					</ul>
+				</div>
+
+				<div class="job-card">
+					<div class="job-header">
+						<h3>Web & Software Developer</h3>
+						<span class="company">Innovista Rawal Islamabad</span>
+					</div>
+					<span class="duration">May 2025 – July 2025</span>
+					<ul>
+						<li>Developed custom API connectors and backend modules using C# and PHP.</li>
+						<li>Integrated Stripe Payment Gateways, processing transactional billing requests with a 99.8% payment success rate.</li>
+					</ul>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main {
+		width: 960px;
+		max-width: calc(100% - 2em);
+		margin: auto;
+		padding: 2em 1em;
+	}
+	.page-title {
+		font-size: 2rem;
+		margin-bottom: 1.2em;
+	}
+	.experience-list {
+		display: flex;
+		flex-direction: column;
+		gap: 2em;
+	}
+	.job-card {
+		padding-bottom: 1.5em;
+		border-bottom: 1px dashed #ccc;
+	}
+	.job-card:last-child {
+		border-bottom: none;
+	}
+	.job-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: 0.5em;
+	}
+	.job-header h3 {
+		margin: 0;
+		font-size: 1.25rem;
+	}
+	.company {
+		font-weight: 600;
+		color: #2563eb;
+	}
+	.duration {
+		display: block;
+		font-size: 0.88rem;
+		color: #666;
+		margin: 0.3em 0 0.8em;
+	}
+	ul {
+		margin: 0;
+		padding-left: 1.2em;
+	}
+	li {
+		margin-bottom: 0.5em;
+		line-height: 1.6;
+		color: #333;
+	}
+</style>

@@ -1,0 +1,101 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { title } from '../settings/settings.json';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Projects | ${title}`} description="Abdul Muqsit Key Projects" />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1 class="page-title">Key Projects</h1>
+
+			<div class="projects-grid">
+				<div class="project-card">
+					<h3>Autonomous Multi-Channel Security & Agentic Notification System</h3>
+					<p class="tech"><strong>Tech Stack:</strong> Azure AI, n8n, .NET Core, WaAPI</p>
+					<ul>
+						<li>Architected and deployed an enterprise-grade autonomous agentic pipeline utilizing event-driven workflow orchestration.</li>
+						<li>Implemented RAG-inspired grounding mechanisms, secure JSON payload structures, and Entra ID / OAuth2 Bearer token authorization.</li>
+						<li>Integrated multi-channel alerting workflows (Email, WhatsApp API, and simulated voice dispatch) mimicking Azure Logic Apps patterns.</li>
+					</ul>
+				</div>
+
+				<div class="project-card">
+					<h3>Campus Management Web API</h3>
+					<p class="tech"><strong>Tech Stack:</strong> .NET 8, Clean Architecture, SQL Server, OpenAPI/Swagger</p>
+					<ul>
+						<li>Architected an open-source enterprise backend system using .NET 8 and Clean Architecture.</li>
+						<li>Documented 20+ endpoints using OpenAPI/Swagger for public consumption and developer integration.</li>
+					</ul>
+				</div>
+
+				<div class="project-card">
+					<h3>Gate Access Control System</h3>
+					<p class="tech"><strong>Tech Stack:</strong> .NET Core Microservices, React.js, Azure APIs, JWT</p>
+					<ul>
+						<li>Built a multi-tier security application utilizing .NET Core Web APIs and custom React/TypeScript frontend interfaces with real-time JWT token verification.</li>
+					</ul>
+				</div>
+
+				<div class="project-card">
+					<h3>International Tourism & Booking Platform (ToursbyRafiq.com)</h3>
+					<p class="tech"><strong>Tech Stack:</strong> Full-Stack Web Development, Stripe API, External APIs</p>
+					<ul>
+						<li>Engineered a full-featured web platform for a UAE-based international tourism company with an automated end-to-end booking management system.</li>
+						<li>Integrated Stripe Payment Gateways and external third-party APIs to process secure international transactions and sync real-time tour data.</li>
+					</ul>
+				</div>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
+
+<style>
+	main {
+		width: 960px;
+		max-width: calc(100% - 2em);
+		margin: auto;
+		padding: 2em 1em;
+	}
+	.page-title {
+		font-size: 2rem;
+		margin-bottom: 1.2em;
+	}
+	.projects-grid {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5em;
+	}
+	.project-card {
+		padding: 1.5em;
+		border: 1px solid #e2e8f0;
+		border-radius: 8px;
+		background: #fafafa;
+	}
+	.project-card h3 {
+		margin-top: 0;
+		margin-bottom: 0.4em;
+		font-size: 1.2rem;
+	}
+	.tech {
+		color: #2563eb;
+		font-size: 0.9rem;
+		margin-bottom: 0.8em;
+	}
+	ul {
+		margin: 0;
+		padding-left: 1.2em;
+	}
+	li {
+		margin-bottom: 0.4em;
+		line-height: 1.5;
+		color: #333;
+	}
+</style>
