@@ -1,65 +1,110 @@
 ---
-import { getCollection } from "astro:content";
 import BaseHead from "../../components/BaseHead.astro";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
-import Post from "../../components/Post.astro";
 import ColorScript from "../../components/ColorScript.astro";
-
-import { title, subtitle } from "../../settings/settings.json"
+import Tags from "../../components/Tags.astro";
 
 export async function getStaticPaths() {
-	let posts = await getCollection("posts");
-	const tags = posts.reduce((allTags, post) => {
-		const postTags = post.data.tags;
-		if (postTags) {
-			postTags.forEach((tag) => {
-				if (!allTags[tag]) {
-					allTags[tag] = [];
-				}
-				allTags[tag].push(post);
-			});
-		}
-		return allTags;
-	}, {});
+	// Fetch all blog posts dynamically
+	const postsRaw = import.meta.glob('../post/*.md', { eager: true });
+	const posts = Object.values(postsRaw) as any[];
 
-	return Object.keys(tags).map((t) => {
+	// Extract all unique tags across all posts
+	const allTags = [...new Set(posts.flatMap((post) => post.frontmatter.tags || []))];
+
+	// Generate static path for each tag
+	return allTags.map((tag) => {
+		const filteredPosts = posts
+			.filter((post) => post.frontmatter.tags && post.frontmatter.tags.includes(tag))
+			.sort((a, b) => new Date(b.frontmatter.added || b.frontmatter.date).getTime() - new Date(a.frontmatter.added || a.frontmatter.date).getTime());
+
 		return {
-			params: { tag: t },
-			props: { tag: tags[t] },
+			params: { tag },
+			props: { posts: filteredPosts, allTags, tag },
 		};
 	});
 }
 
-const { tag } = Astro.props;
-const { tag: currentTag } = Astro.params;
-
-let sortedPosts = tag.sort(
-	(a, b) => new Date(b.data.added).valueOf() - new Date(a.data.added).valueOf(),
-);
+const { posts, allTags, tag } = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en-us">
-	<BaseHead title={title} description={subtitle} />
+<html lang="en">
+	<head>
+		<BaseHead title={`Posts tagged with "${tag}" | Abdul Muqsit`} description={`All posts tagged with #${tag}`} />
+	</head>
 	<body>
-		<Header />
+		<Header title="Abdul's Blog" subtitle="Writing, musings, and technical architecture" />
 		<main>
-			<content>
-				<h3>Posts tagged with "{currentTag}"</h3>
-				<ul class="tags-list">
-					{
-						sortedPosts.map(
-							({
-								url,
-								data: { description, slug, title, tags, added: date },
-							}) => <Post {url} {description} {date} {slug} {title} {tags} />
-						)
-					}
+			{allTags.length > 0 && (
+				<div class="tags-container">
+					<Tags tags={allTags} all />
+				</div>
+			)}
+
+			<section class="posts-list">
+				<h2 class="tag-heading">Posts tagged with "{tag}"</h2>
+				<ul>
+					{posts.map((post) => (
+						<li class="post-item">
+							<a href={post.url} class="post-title">
+								{post.frontmatter.title}
+							</a>
+							<span class="post-date">
+								{new Date(post.frontmatter.added || post.frontmatter.date).toLocaleDateString("en-us", { month: "short", day: "numeric", year: "numeric" })}
+							</span>
+							<p class="post-desc">{post.frontmatter.description}</p>
+							{post.frontmatter.tags && <Tags tags={post.frontmatter.tags} />}
+						</li>
+					))}
 				</ul>
-			</content>
-			<Footer />
+			</section>
 		</main>
+		<Footer />
 		<ColorScript />
 	</body>
 </html>
+
+<style>
+	main {
+		width: 960px;
+		max-width: calc(100% - 2em);
+		margin: auto;
+		padding: 2em 1em;
+	}
+	.tags-container {
+		margin-bottom: 2em;
+		text-align: center;
+	}
+	.tag-heading {
+		font-size: 1.4rem;
+		text-align: center;
+		margin: 1.5em 0 2em;
+		font-weight: normal;
+		color: #444;
+	}
+	.posts-list ul {
+		list-style: none;
+		padding: 0;
+	}
+	.post-item {
+		margin-bottom: 2em;
+	}
+	.post-title {
+		font-size: 1.25rem;
+		font-weight: bold;
+		text-decoration: none;
+		color: inherit;
+	}
+	.post-date {
+		margin-left: 0.8em;
+		font-size: 0.85rem;
+		color: #777;
+	}
+	.post-desc {
+		margin: 0.4em 0 0.6em;
+		color: #444;
+		line-height: 1.5;
+	}
+</style>

@@ -1,43 +1,213 @@
 ---
-import { getCollection } from "astro:content";
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import HomePosts from "../components/HomePosts.astro";
 import ColorScript from "../components/ColorScript.astro";
-import Tags from "../components/Tags.astro";
-import { title, subtitle } from "../settings/settings.json"
-import { Content as About } from "./about.md";
-import getTags from "../scripts/getTags";
 
-const posts = await getCollection("posts");
-const tags = getTags(posts);
+// Fetch posts dynamically using Vite import.meta.glob
+const postsRaw = import.meta.glob('./post/*.md', { eager: true });
+const allPosts = Object.values(postsRaw) as any[];
+
+// Sort posts by date descending and take top 5 recent posts
+const posts = allPosts
+	.sort((a, b) => new Date(b.frontmatter.added || b.frontmatter.date).getTime() - new Date(a.frontmatter.added || a.frontmatter.date).getTime())
+	.slice(0, 5);
+
+// Extract all unique tags
+const allTags = [...new Set(allPosts.flatMap((post) => post.frontmatter.tags || []))];
+
+// Pick a random post URL for "read a random one"
+const randomPost = posts.length > 0 ? posts[Math.floor(Math.random() * posts.length)].url : '/blog';
 ---
 
-<!doctype html>
-<html lang="en-us">
-	<BaseHead title={title} description={subtitle} />
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<BaseHead title="Abdul Muqsit | Enterprise AI Engineer" description="Software & AI Engineer specializing in .NET Core and Enterprise AI." />
+	</head>
 	<body>
-		<Header title={title} />
+		<Header />
 		<main>
-			<About />
+			<!-- Image 1: Bio Intro Section -->
+			<section class="intro-section">
+				<p>Welcome to this blog template by <a href="https://github.com/abdulmuqsit1299" target="_blank" rel="noopener noreferrer">abdulmuqsit</a>!</p>
 
-			<br />
+				<p>Hi! I'm <strong>Abdul Muqsit</strong>.</p>
 
-			<h3>Here's my most recent posts</h3>
+				<p>
+					I'm an <strong>Enterprise AI Engineer</strong>. Outside of that fancy title, I'm a builder at heart, open-source contributor, and tech innovator bridging traditional <strong>.NET software</strong> with modern <strong>Agentic AI systems</strong> and multi-agent automation.
+				</p>
 
-			<HomePosts allPosts={posts} />
+				<p>
+					I enjoy crafting code to solve real-world problems, exploring cutting-edge technology, swimming, hiking, cycling, and playing football. When I'm offline, I love hanging out and having great gatherings with my family and friends.
+				</p>
 
-			<p class="center">
-				You can also <a href="https://blahg.netlify.app/rss.xml">
-					subscribe with RSS!
-				</a>
-			</p>
-			<br />
+				<p>
+					You should check out my code on <a href="https://github.com/abdulmuqsit1299" target="_blank" rel="noopener noreferrer">GitHub</a> or connect on <a href="https://linkedin.com/in/abdulmuqsit-dev" target="_blank" rel="noopener noreferrer">LinkedIn</a>. Or don't. Follow your dreams.
+				</p>
 
-			<Tags tags={tags} all />
+				<p>Enjoy!</p>
+			</section>
+
+			<!-- Image 2: Cassidy Top Newsletter Banner -->
+			<div class="newsletter-callout">
+				You should <a href="/newsletter">subscribe to my newsletter</a>!
+			</div>
+
+			<!-- Image 2: Recent Posts Section -->
+			<section class="recent-posts">
+				<h2 class="recent-title">
+					Here's my most recent posts or <a href={randomPost}>read a random one</a>!
+				</h2>
+
+				<ul class="posts-list">
+					{posts.map((post) => (
+						<li class="post-item">
+							<a href={post.url} class="post-title">
+								{post.frontmatter.title}
+							</a>
+							<span class="post-date">
+								{new Date(post.frontmatter.added || post.frontmatter.date).toLocaleDateString("en-us", { month: "short", day: "numeric", year: "numeric" })}
+							</span>
+							<p class="post-desc">{post.frontmatter.description}</p>
+							{post.frontmatter.tags && (
+								<div class="post-tags">
+									{post.frontmatter.tags.map((t: string) => (
+										<a href={`/tag/${t}`} class="tag-link">#{t}</a>
+									))}
+								</div>
+							)}
+						</li>
+					))}
+				</ul>
+			</section>
+
+			<!-- Image 2: Bottom Subscribe Callout -->
+			<div class="subscribe-bottom">
+				Subscribe <a href="/newsletter">with email</a> or <a href="/rss.xml">with RSS</a>!
+			</div>
+
+			<!-- Image 2: View Posts by Tag Grid -->
+			{allTags.length > 0 && (
+				<div class="tags-section">
+					<h3 class="tags-heading">View posts by tag</h3>
+					<div class="tags-container">
+						{allTags.map((tag) => (
+							<a href={`/tag/${tag}`} class="tag-link">#{tag}</a>
+						))}
+					</div>
+				</div>
+			)}
 		</main>
 		<Footer />
 		<ColorScript />
 	</body>
 </html>
+
+<style>
+	main {
+		width: 960px;
+		max-width: calc(100% - 2em);
+		margin: auto;
+		padding: 2em 1em;
+	}
+	.intro-section {
+		line-height: 1.7;
+		font-size: 1.05rem;
+		margin-bottom: 2.5em;
+		color: #222;
+	}
+	.intro-section p {
+		margin-bottom: 1.2em;
+	}
+	.intro-section a {
+		font-weight: bold;
+		text-decoration: underline;
+		color: inherit;
+	}
+	.newsletter-callout {
+		text-align: center;
+		font-size: 1.15rem;
+		margin: 2.5em 0 2.5em;
+	}
+	.newsletter-callout a {
+		font-weight: bold;
+		text-decoration: underline;
+		color: inherit;
+	}
+	.recent-title {
+		font-size: 1.25rem;
+		font-weight: normal;
+		text-align: center;
+		margin-bottom: 2.2em;
+		color: #333;
+	}
+	.recent-title a {
+		font-weight: bold;
+		text-decoration: underline;
+		color: inherit;
+	}
+	.posts-list {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 3em 0;
+	}
+	.post-item {
+		margin-bottom: 2.2em;
+	}
+	.post-title {
+		font-size: 1.3rem;
+		font-weight: bold;
+		text-decoration: underline;
+		color: inherit;
+	}
+	.post-date {
+		margin-left: 0.8em;
+		font-size: 0.9rem;
+		color: #777;
+		font-style: italic;
+	}
+	.post-desc {
+		margin: 0.4em 0 0.4em;
+		color: #444;
+		line-height: 1.5;
+	}
+	.post-tags {
+		display: flex;
+		gap: 0.8em;
+		margin-top: 0.3em;
+	}
+	.subscribe-bottom {
+		text-align: center;
+		font-size: 1.1rem;
+		margin: 3em 0 3.5em;
+	}
+	.subscribe-bottom a {
+		font-weight: bold;
+		text-decoration: underline;
+		color: inherit;
+	}
+	.tags-section {
+		text-align: center;
+		margin-top: 2em;
+	}
+	.tags-heading {
+		font-size: 1.2rem;
+		font-weight: normal;
+		margin-bottom: 1.2em;
+		color: #444;
+	}
+	.tags-container {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: 0.8em 1.4em;
+		max-width: 650px;
+		margin: 0 auto;
+	}
+	.tag-link {
+		font-size: 0.95rem;
+		text-decoration: underline;
+		color: inherit;
+	}
+</style>
