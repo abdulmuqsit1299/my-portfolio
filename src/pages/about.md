@@ -1,9 +1,11 @@
-Welcome to this blog template by [cassidoo](https://cassidoo.co)!
+Welcome to this blog template by [abdulmuqsit](https://github.com/abdulmuqsit1299)!
 
-It's using Astro and TinaCMS. You can [clone it on GitHub](https://github.com/cassidoo/blahg) to use it for yourself, and see how it works! I would _love_ if you told me when you do use it, I love seeing variations on it!
+Hi! I'm **Abdul Muqsit**.
 
-The tags at the bottom of the page are dynamically generated. The more tags you use, the more tags are added to the list! Posts are simple markdown files.
+I'm an **Enterprise AI Engineer**. Outside of that fancy title, I'm a builder at heart, open-source contributor, and tech innovator bridging traditional **.NET** software with modern **Agentic AI systems** and multi-agent automation.
 
-You should also check out [my newsletter](https://cassidoo.co/newsletter) or my [GitHub profile](https://github.com/cassidoo). Or don't. Follow your dreams.
+I enjoy crafting code to solve real-world problems, exploring cutting-edge technology, swimming, hiking, cycling, and playing football. When I'm offline, I love hanging out and having great gatherings with my family and friends.
+
+You should check out my code on [GitHub](https://github.com/abdulmuqsit1299) or connect on [LinkedIn](https://linkedin.com/in/abdulmuqsit-dev). Or don't. Follow your dreams.
 
 Enjoy!
